@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" href="css/styles.css" />
+    <script src="https://player.vimeo.com/api/player.js"></script>
+    <script src="https://code.createjs.com/1.0.0/createjs.min.js"></script>
+    <script src="bannerMiClubbi.js"></script>
+    <script>
+      var canvas,
+        stage,
+        exportRoot,
+        anim_container,
+        dom_overlay_container,
+        fnStartAnimation;
+      function init() {
+        canvas = document.getElementById("canvas");
+        anim_container = document.getElementById("animation_container");
+        dom_overlay_container = document.getElementById(
+          "dom_overlay_container"
+        );
+        var comp = AdobeAn.getComposition("105ADA05A2993A4FA1BF28C4372C7B44");
+        var lib = comp.getLibrary();
+        var loader = new createjs.LoadQueue(false);
+        loader.addEventListener("fileload", function (evt) {
+          handleFileLoad(evt, comp);
+        });
+        loader.addEventListener("complete", function (evt) {
+          handleComplete(evt, comp);
+        });
+        var lib = comp.getLibrary();
+        loader.loadManifest(lib.properties.manifest);
+      }
+      function handleFileLoad(evt, comp) {
+        var images = comp.getImages();
+        if (evt && evt.item.type == "image") {
+          images[evt.item.id] = evt.result;
+        }
+      }
+      function handleComplete(evt, comp) {
+        //This function is always called, irrespective of the content. You can use the variable "stage" after it is created in token create_stage.
+        var lib = comp.getLibrary();
+        var ss = comp.getSpriteSheet();
+        var queue = evt.target;
+        var ssMetadata = lib.ssMetadata;
+        for (i = 0; i < ssMetadata.length; i++) {
+          ss[ssMetadata[i].name] = new createjs.SpriteSheet({
+            images: [queue.getResult(ssMetadata[i].name)],
+            frames: ssMetadata[i].frames,
+          });
+        }
+        exportRoot = new lib.RECOVER_bannerApp();
+        stage = new lib.Stage(canvas);
+        //Registers the "tick" event listener.
+        fnStartAnimation = function () {
+          stage.addChild(exportRoot);
+          createjs.Ticker.framerate = lib.properties.fps;
+          createjs.Ticker.addEventListener("tick", stage);
+        };
+        //Code to support hidpi screens and responsive scaling.
+        AdobeAn.makeResponsive(true, "width", true, 1, [
+          canvas,
+          anim_container,
+          dom_overlay_container,
+        ]);
+        AdobeAn.compositionLoaded(lib.properties.id);
+        fnStartAnimation();
+      }
+    </script>
+    <title>Mi Clubbi</title>
+  </head>
+  <body onload="init();">
+    <header class="cabecera">
+      <h1 class="cabecera--titulo">Mi Clubbi</h1>
+      <img src="imagenes/logoSvg.svg" alt="" />
+    </header>
+    <main>
+      <section class="contenedor">
+        <article id="infoApp">
+          <div class="perfiles descripcion">
+            <div class="titulo">
+              <h2>¡Bienvenido a nuestra aplicación de gestión deportiva!</h2>
+              <svg
+                id="pelotaRebota"
+                width="95"
+                height="102"
+                viewBox="0 0 95 102"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M45.846 0.631409C35.0835 1.0425 24.429 5.46891 15.9518 13.9102L37.6424 37.3594C44.4244 29.0074 47.5261 16.5736 45.846 0.631409ZM49.7756 0.656486C51.4333 17.3452 48.0861 31.0221 40.405 40.3467L47.5001 48.0164L79.0484 13.9102C70.7343 5.6311 60.3263 1.21196 49.7756 0.656486ZM13.192 16.8938C5.38365 26.0583 1.28944 37.5766 0.90918 49.2117C15.6557 51.0281 27.1568 47.6749 34.8828 40.343L13.192 16.8938ZM81.8082 16.8938L50.26 51L57.3514 58.6664C64.6824 51.6089 74.9228 47.9367 87.309 48.0938C89.4961 48.1214 91.7512 48.2702 94.0679 48.5391C93.5541 37.1332 89.4659 25.8816 81.808 16.8938H81.8082ZM37.6456 43.3294C29.0204 51.6333 16.3692 55.252 0.932377 53.4598C1.44619 64.8659 5.53411 76.118 13.1922 85.1063L44.7403 51L37.6456 43.3294ZM86.4254 52.2989C75.3145 52.3088 66.449 55.6481 60.1175 61.657L81.808 85.1063C89.6164 75.9417 93.7106 64.4234 94.0909 52.7883C91.4297 52.4602 88.8717 52.297 86.4249 52.2991L86.4254 52.2989ZM47.5001 53.9836L15.9518 88.0899C24.266 96.3689 34.674 100.788 45.2246 101.344C43.567 84.6551 46.9141 70.9781 54.5952 61.6535L47.5001 53.9836ZM57.3579 64.6406C50.5758 72.9926 47.4741 85.4264 49.1543 101.369C59.9167 100.958 70.5712 96.5311 79.0484 88.0899L57.3579 64.6406Z"
+                  fill="#FF9A62"
+                />
+              </svg>
+            </div>
+            <h3>¿Que es Mi Clubbi?</h3>
+            <br />
+
+            <p>
+              Nuestra aplicación de gestión deportiva está diseñada para
+              facilitar la organización y comunicación dentro de los equipos
+              deportivos. Ya sea que seas un entrenador, un jugador o un padre,
+              encontrarás herramientas específicas para satisfacer tus
+              necesidades.
+            </p>
+          </div>
+          <hr />
+          <div class="perfiles entrenador">
+            <h4>Entrenador</h4>
+            <i class="fa fa-thin fa-calendar" style="color: #63e6be"></i>
+            <p>
+              <span class="resaltado">Organización de eventos: </span>Crea y
+              programa eventos en el calendario para entrenamientos, partidos y
+              reuniones.
+            </p>
+            <br /><br />
+            <i class="fa fa-solid fa-dumbbell" style="color: #63e6be"></i>
+            <p>
+              <span class="resaltado">Gestión de entrenamientos: </span
+              >Planifica y registra sesiones de entrenamiento, registra
+              estadísticas sobre los jugadores, entrenamientos....
+            </p>
+            <br /><br />
+            <i class="fa fa-regular fa-image" style="color: #63e6be"></i>
+            <p>
+              <span class="resaltado">Sube fotos: </span>Comparte momentos
+              destacados con el equipo.
+            </p>
+            <br /><br />
+            <i class="fa fa-solid fa-utensils" style="color: #63e6be"></i>
+            <p>
+              <span class="resaltado">Dietas presonalizadas: </span>Proporciona
+              recetas y consejos nutricionales específicos para cada deporte y
+              jugador.
+            </p>
+            <br /><br />
+          </div>
+          <hr />
+          <div class="perfiles jugador">
+            <h4>Jugadores</h4>
+            <i class="fa fa-thin fa-calendar" style="color: #63e6be"></i>
+            <p>
+              <span class="resaltado">Visualización de eventos: </span>Accede al
+              calendario para conocer las fehcas de entrenamientos y partidos y
+              gestiona tus propios eventos.
+            </p>
+            <br /><br />
+            <i class="fa fa-solid fa-dumbbell" style="color: #63e6be"></i>
+            <p>
+              <span class="resaltado">Seguimiento de entrenamientos: </span
+              >Consulta los detalles proporcionados por tu entrenador de las
+              sesiones de entrenamiento y los partidos.
+            </p>
+            <br /><br />
+            <i class="fa fa-regular fa-image" style="color: #63e6be"></i>
+            <p>
+              <span class="resaltado">Explora contenido multimedia: </span>Mira
+              las fotos subidas por el entrenador y descarga las que más te
+              gusten.
+            </p>
+            <br /><br />
+            <i class="fa fa-solid fa-utensils" style="color: #63e6be"></i>
+            <p>
+              <span class="resaltado">Acceso a dietas: </span>Encuentra recetas
+              y recomendaciones nutricionales adaptadas a tus necesidades
+              deportiva, comunica a tu entrenador tus intolerancias para hacer
+              aun más persnalizadas tus dietas.
+            </p>
+            <br /><br />
+          </div>
+          <hr />
+          <div class="perfiles padres">
+            <h4>Padres</h4>
+            <i class="fa fa-solid fa-child" style="color: #63e6be"></i>
+            <p>
+              <span class="resaltado">Vinculación con los hijos: </span>Sigue el
+              progreso de tu hijo en el equipo.
+            </p>
+            <br /><br />
+            <i class="fa fa-thin fa-calendar" style="color: #63e6be"></i>
+            <p>
+              <span class="resaltado">Calendario compartido: </span>Mantente
+              informado sobre los eventos y actividades.
+            </p>
+            <br /><br />
+            <i class="fa fa-regular fa-image" style="color: #63e6be"></i>
+            <p>
+              <span class="resaltado">Acceso al contenido multimedia: </span
+              >Mira las fotos subidas por el entrenador del equipo y sus
+              jugadores.
+            </p>
+            <br /><br />
+            <i class="fa fa-solid fa-utensils" style="color: #63e6be"></i>
+            <p>
+              <span class="resaltado">Acceso a dietas: </span>Informatie sobre
+              las dietas recomendadas por el entrenador para los jugadores.
+            </p>
+            <br /><br />
+          </div>
+
+          <p id="mensajeria">
+            <span class="exclamacion">¡</span> Seas entrenador, jugador o padre
+            utiliza la mensajería para estar en contacto
+            <span class="exclamacion">!</span>
+          </p>
+
+          <div class="pelota">
+            <svg
+              id="pelotaRueda"
+              width="65"
+              height="72"
+              viewBox="0 0 95 102"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M45.846 0.631409C35.0835 1.0425 24.429 5.46891 15.9518 13.9102L37.6424 37.3594C44.4244 29.0074 47.5261 16.5736 45.846 0.631409ZM49.7756 0.656486C51.4333 17.3452 48.0861 31.0221 40.405 40.3467L47.5001 48.0164L79.0484 13.9102C70.7343 5.6311 60.3263 1.21196 49.7756 0.656486ZM13.192 16.8938C5.38365 26.0583 1.28944 37.5766 0.90918 49.2117C15.6557 51.0281 27.1568 47.6749 34.8828 40.343L13.192 16.8938ZM81.8082 16.8938L50.26 51L57.3514 58.6664C64.6824 51.6089 74.9228 47.9367 87.309 48.0938C89.4961 48.1214 91.7512 48.2702 94.0679 48.5391C93.5541 37.1332 89.4659 25.8816 81.808 16.8938H81.8082ZM37.6456 43.3294C29.0204 51.6333 16.3692 55.252 0.932377 53.4598C1.44619 64.8659 5.53411 76.118 13.1922 85.1063L44.7403 51L37.6456 43.3294ZM86.4254 52.2989C75.3145 52.3088 66.449 55.6481 60.1175 61.657L81.808 85.1063C89.6164 75.9417 93.7106 64.4234 94.0909 52.7883C91.4297 52.4602 88.8717 52.297 86.4249 52.2991L86.4254 52.2989ZM47.5001 53.9836L15.9518 88.0899C24.266 96.3689 34.674 100.788 45.2246 101.344C43.567 84.6551 46.9141 70.9781 54.5952 61.6535L47.5001 53.9836ZM57.3579 64.6406C50.5758 72.9926 47.4741 85.4264 49.1543 101.369C59.9167 100.958 70.5712 96.5311 79.0484 88.0899L57.3579 64.6406Z"
+                fill="#FF9A62"
+              />
+            </svg>
+          </div>
+          <hr />
+        </article>
+
+        <article id="galeria">
+          <h3>Explora MiClubbi</h3>
+          <p id="galeria--introduccion">
+            Explora nuestra aplicación Mi Clubbi desde el diseño conceptual en
+            &nbsp; &nbsp;<img
+              src="images/logo_figma.svg"
+              alt="logo Figma"
+            /><span id="figma"
+              ><a
+                href="https://www.figma.com/login"
+                title="Lleva a página web de Figma"
+              >
+                Figma</a
+              > </span
+            >&nbsp; hasta la vida real en nuestra galería de fotos. Sumérgete en
+            la experiencia completa y descubre cómo estamos optimizando la
+            gestión de equipos deportivos<span
+              id="galeria--introduccion__texto"
+            >
+              ¡Bienvenido al futuro del deporte!</span
+            >
+          </p>
+          <div id="galeria--video">
+            <iframe
+              src="https://player.vimeo.com/video/927596159?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479"
+              allow="autoplay; fullscreen; picture-in-picture; clipboard-write"
+              title="MyClubbi"
+              aria-label="video del prototipado en figma"
+            ></iframe>
+          </div>
+
+          <div id="flexContainer">
+            <div class="item">
+              <img class="galeria" src="imagenes/perfilEntrenador.jpg" alt="" />
+            </div>
+            <div class="item">
+              <img class="galeria" src="imagenes/Nutricion.jpg" alt="" />
+            </div>
+            <div class="item">
+              <img class="galeria" src="imagenes/Entrenamientos.jpg" alt="" />
+            </div>
+            <div class="item">
+              <img class="galeria" src="imagenes/calendario.jpg" alt="" />
+            </div>
+            <div class="item">
+              <img class="galeria" src="imagenes/galeria.jpg" alt="" />
+            </div>
+            <div class="item">
+              <img class="galeria" src="imagenes/Mensajes.jpg" alt="" />
+            </div>
+          </div>
+        </article>
+      </section>
+      <footer>
+        <div
+          id="animation_container"
+          style="background-color: rgba(204, 204, 204, 1)"
+        >
+          <canvas
+            id="canvas"
+            style="
+              position: absolute;
+              display: block;
+              background-color: rgba(204, 204, 204, 1);
+            "
+          ></canvas>
+          <div
+            id="dom_overlay_container"
+            style="
+              pointer-events: none;
+              overflow: hidden;
+              position: absolute;
+              left: 0px;
+              top: 0px;
+              display: block;
+            "
+          ></div>
+        </div>
+      </footer>
+    </main>
+  </body>
+</html>
