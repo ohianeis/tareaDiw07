@@ -176,8 +176,9 @@ hr {
   }
 }
 footer {
-  height: 400px;
-  margin: 10px;
+  
+  margin-top: 25px;
+  margin-bottom:25px;
 }
 
 #animation_container {
